@@ -39,6 +39,7 @@
             transition: all 0.3s ease;
         }
 
+        /* Adjusted Head to be a div for easy swapping */
         #head { top: 10px; width: 180px; height: 180px; z-index: 10; border-radius: 50%; }
         #torso { top: 160px; width: 300px; height: 250px; z-index: 5; }
         #legs { top: 380px; width: 250px; height: 200px; z-index: 2; }
@@ -59,6 +60,9 @@
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+
+        /* Make the Head control span full width to look better in the grid */
+        .head-control { grid-column: span 2; }
 
         button {
             padding: 10px 20px;
@@ -81,27 +85,40 @@
     <p class="slogan">Do you also love Matthias so much? Now you can build your own!</p>
 
     <div id="character-canvas">
-        <img id="head" class="part" src="Screenshot 2026-03-23 103925.png" alt="Matthias Head">
+        <div id="head" class="part"></div>
         <div id="torso" class="part"></div>
         <div id="legs" class="part"></div>
     </div>
 
     <div class="controls">
+        <div class="control-group head-control">
+            <p>Select Head</p>
+            <button onclick="changePart('head', -1)">⬅️</button>
+            <button onclick="changePart('head', 1)">➡️</button>
+        </div>
+
         <div class="control-group">
             <p>Select Torso</p>
             <button onclick="changePart('torso', -1)">⬅️</button>
             <button onclick="changePart('torso', 1)">➡️</button>
         </div>
+
         <div class="control-group">
             <p>Select Legs & Shoes</p>
             <button onclick="changePart('legs', -1)">⬅️</button>
             <button onclick="changePart('legs', 1)">➡️</button>
         </div>
+
         <button class="random-btn" onclick="randomize()">🔀 Surprise Matthias!</button>
     </div>
 
     <script>
         const parts = {
+            head: [
+                "Screenshot 2026-03-23 103925.png", // Your original image
+                "https://via.placeholder.com/180/ffd700/8b0000?text=Happy+Matthias", 
+                "https://via.placeholder.com/180/8b0000/ffd700?text=Cool+Matthias"
+            ],
             torso: [
                 "https://i.imgur.com/8Km9tLL.png",
                 "https://i.imgur.com/1XKQFQ2.png",
@@ -114,7 +131,7 @@
             ]
         };
 
-        let currentIndices = { torso: 0, legs: 0 };
+        let currentIndices = { head: 0, torso: 0, legs: 0 };
 
         function updateDisplay() {
             for (let category in parts) {
@@ -131,11 +148,13 @@
         }
 
         function randomize() {
+            currentIndices.head = Math.floor(Math.random() * parts.head.length);
             currentIndices.torso = Math.floor(Math.random() * parts.torso.length);
             currentIndices.legs = Math.floor(Math.random() * parts.legs.length);
             updateDisplay();
         }
 
+        // Run once on load
         updateDisplay();
     </script>
 </body>
