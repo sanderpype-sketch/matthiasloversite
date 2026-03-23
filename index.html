@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Your Matthias</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #fdf5e6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #5d4037;
+        }
+
+        h1 { color: #8b0000; margin-bottom: 5px; }
+        .slogan { font-style: italic; margin-bottom: 20px; font-size: 1.2rem; }
+
+        #character-canvas {
+            position: relative;
+            width: 400px;
+            height: 600px;
+            background: #fff;
+            border: 8px solid #ffd700;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .part {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: all 0.3s ease;
+        }
+
+        #head { top: 10px; width: 180px; height: 180px; z-index: 10; border-radius: 50%; }
+        #torso { top: 160px; width: 300px; height: 250px; z-index: 5; }
+        #legs { top: 380px; width: 250px; height: 200px; z-index: 2; }
+
+        .controls {
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .control-group {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+            background: #ffd700;
+            color: #8b0000;
+            border: 2px solid #8b0000;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        button:hover { background: #ffec8b; }
+        .random-btn { grid-column: span 2; background: #8b0000; color: white; }
+    </style>
+</head>
+<body>
+
+    <h1>Build Your Matthias</h1>
+    <p class="slogan">Do you love Matthias also so much? Now you can build your own!</p>
+
+    <div id="character-canvas">
+        <img id="head" class="part" src="https://i.imgur.com/4AiXzf8.jpeg" alt="Matthias Head">
+        <div id="torso" class="part"></div>
+        <div id="legs" class="part"></div>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <p>Select Torso</p>
+            <button onclick="changePart('torso', -1)">⬅️</button>
+            <button onclick="changePart('torso', 1)">➡️</button>
+        </div>
+        <div class="control-group">
+            <p>Select Legs & Shoes</p>
+            <button onclick="changePart('legs', -1)">⬅️</button>
+            <button onclick="changePart('legs', 1)">➡️</button>
+        </div>
+        <button class="random-btn" onclick="randomize()">🔀 Surprise Matthias!</button>
+    </div>
+
+    <script>
+        const parts = {
+            torso: [
+                "https://i.imgur.com/8Km9tLL.png",
+                "https://i.imgur.com/1XKQFQ2.png",
+                "https://i.imgur.com/3G3QK5b.png"
+            ],
+            legs: [
+                "https://i.imgur.com/2yaf2wb.png",
+                "https://i.imgur.com/0rVeh4A.png",
+                "https://i.imgur.com/9V3QF1E.png"
+            ]
+        };
+
+        let currentIndices = { torso: 0, legs: 0 };
+
+        function updateDisplay() {
+            for (let category in parts) {
+                const element = document.getElementById(category);
+                element.style.backgroundImage = `url('${parts[category][currentIndices[category]]}')`;
+            }
+        }
+
+        function changePart(category, direction) {
+            currentIndices[category] += direction;
+            if (currentIndices[category] < 0) currentIndices[category] = parts[category].length - 1;
+            if (currentIndices[category] >= parts[category].length) currentIndices[category] = 0;
+            updateDisplay();
+        }
+
+        function randomize() {
+            currentIndices.torso = Math.floor(Math.random() * parts.torso.length);
+            currentIndices.legs = Math.floor(Math.random() * parts.legs.length);
+            updateDisplay();
+        }
+
+        updateDisplay();
+    </script>
+</body>
+</html>
